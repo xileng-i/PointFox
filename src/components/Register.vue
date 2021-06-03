@@ -7,12 +7,12 @@
         
       </div>
       <div id="loginContent">
-        <el-input id="username" v-model="newuser.username"  clearable></el-input>
+        <el-input id="newusername" v-model="newUser.newusername"  clearable></el-input>
         
-        <el-input id="password" v-model="newuser.password"  clearable show-password></el-input>
+        <el-input id="newpassword" v-model="newUser.newpassword"  clearable show-password></el-input>
       </div>
       <div id="submitContent">
-        <el-button id="sysBut">注册</el-button>
+        <el-button id="sysBut"  @click="registerSystem" >注册</el-button>
       </div>
 
     </el-card>
@@ -21,13 +21,28 @@
 </template>
 
 <script>
+import Axios from 'axios'
+const url = 'http://localhost:3000'
+
+
 export default {
   data(){
     return {
-      newuser:{
-        username:"",
-        password:"",
-      }
+            newUser:{
+                newusername:"",
+                newpassword:""
+            },
+            fullscreenLoading: false
+        }
+  },
+  methods:{
+    registerSystem(){
+
+      Axios.get(url+'/register',{params:this.newUser}).then((resx)=>{
+        if(resx.data.state=="success"){
+          this.$message(resx.data.message)
+        }
+      })
     }
   }
 };
@@ -42,7 +57,7 @@ export default {
   width: 400px;
   margin: 40px auto;
 }
-#password{
+#newpassword{
   margin-top: 10px;
 }
 #sysBut{
